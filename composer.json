@@ -1,0 +1,20 @@
+{
+    "name": "simples/cron",
+    "authors": [
+        {
+            "name": "bobrd",
+            "email": "eugene.bober@anventa.com"
+        }
+    ],
+    "autoload": {
+        "psr4": {
+            "Simples\\Cron\\": "/src"
+        }
+    },
+    "autoload-dev": {
+        "psr4": {
+            "Simples\\Cron\\Tests": "/tests"
+        }
+    },
+    "require": {}
+}
