@@ -1,5 +1,5 @@
 {
-    "name": "simples/cron",
+    "name": "simples/scheduler",
     "authors": [
         {
             "name": "bobrd",
@@ -7,14 +7,17 @@
         }
     ],
     "autoload": {
-        "psr4": {
-            "Simples\\Cron\\": "/src"
+        "psr-4": {
+            "Simples\\Scheduler\\": "src/"
         }
     },
+
     "autoload-dev": {
-        "psr4": {
-            "Simples\\Cron\\Tests": "/tests"
+        "psr-4": {
+            "Simples\\Scheduler\\Tests\\": "tests/"
         }
     },
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    }
 }
