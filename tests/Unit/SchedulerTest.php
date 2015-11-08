@@ -1,6 +1,6 @@
 <?php
 
-namespace Simples\Scheduler\Tests;
+namespace Simples\Scheduler\Tests\Unit;
 
 use Simples\Scheduler\Scheduler;
 use Simples\Scheduler\TaskInterface;

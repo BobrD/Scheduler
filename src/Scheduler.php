@@ -77,10 +77,11 @@ class Scheduler
         if ($pid === -1) {
             // Зупускаем задачу в текущем потоке если не смогли создать форк
             $task->start();
-        } else if ($pid) {
-            // Родитель
-        } else {
-            $task->start();
+        } else if (0 === $pid) {
+            try {
+                $task->start();
+            } catch (\Exception $e) {}
+            exit();
         }
     }
 }
