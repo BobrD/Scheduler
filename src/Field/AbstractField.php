@@ -45,7 +45,7 @@ abstract class AbstractField
     {
         $type = $this->getFieldType($field);
 
-        $this->{'check' . ucfirst($type)}($field);
+        $this->{'check'.ucfirst($type)}($field);
 
         $this->fieldType = $type;
         $this->field = $field;
@@ -53,19 +53,21 @@ abstract class AbstractField
 
     /**
      * @param \DateTime $dateTime
+     *
      * @return mixed
      */
-    public abstract function getTime(\DateTime $dateTime);
+    abstract public function getTime(\DateTime $dateTime);
 
     /**
      * @param \DateTime $dateTime
+     *
      * @return bool
      */
     public function isMatch(\DateTime $dateTime)
     {
         $time = $this->getTime($dateTime);
 
-        return $this->{'match' . ucfirst($this->fieldType)}($time, $this->field);
+        return $this->{'match'.ucfirst($this->fieldType)}($time, $this->field);
     }
 
     /**
@@ -79,12 +81,12 @@ abstract class AbstractField
     /**
      * @return int
      */
-    protected abstract function getLowerBoundary();
+    abstract protected function getLowerBoundary();
 
     /**
      * @return int
      */
-    protected abstract function getUpperBoundary();
+    abstract protected function getUpperBoundary();
 
     /**
      * @return array
@@ -110,7 +112,7 @@ abstract class AbstractField
         $value = intval($value);
 
         if ($value < $this->getLowerBoundary() || $value > $this->getUpperBoundary()) {
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException();
         }
     }
 
@@ -122,6 +124,7 @@ abstract class AbstractField
         if (!strstr($field, '-')) {
             return;
         }
+
         $range = explode('-', $field);
         $begin = $range[0];
         $end = $range[1];
@@ -129,7 +132,7 @@ abstract class AbstractField
         $this->checkInterval($end);
 
         if ($begin > $end) {
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException();
         }
     }
 
@@ -153,7 +156,7 @@ abstract class AbstractField
         $totalItems = count($times);
 
         if ($totalItems > $maxItems || count(array_unique($times)) < $totalItems) {
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException();
         }
 
         foreach ($times as $time) {
@@ -196,6 +199,7 @@ abstract class AbstractField
     /**
      * @param $time
      * @param $field
+     *
      * @return bool
      */
     private function matchEvery($time, $field)
@@ -204,7 +208,7 @@ abstract class AbstractField
 
         if ($field === 0 && $field === $time) {
             return true;
-        } else if ($field === 0 && $field !== $time) {
+        } elseif ($field === 0 && $field !== $time) {
             return false;
         } else {
             return $time % $field === 0;
@@ -214,6 +218,7 @@ abstract class AbstractField
     /**
      * @param $time
      * @param $field
+     *
      * @return bool
      */
     private function matchRange($time, $field)
@@ -232,6 +237,7 @@ abstract class AbstractField
     /**
      * @param $time
      * @param $field
+     *
      * @return bool
      */
     private function matchComma($time, $field)
@@ -248,6 +254,7 @@ abstract class AbstractField
     /**
      * @param $time
      * @param $field
+     *
      * @return bool
      */
     private function matchCommaEvery($time, $field)
@@ -258,13 +265,15 @@ abstract class AbstractField
 
         $parts = explode('/', $field);
         $comma = $parts[0];
-        $every = '*/' . $parts[1];
+        $every = '*/'.$parts[1];
+
         return $this->matchComma($time, $comma) && $this->matchEvery($time, $every);
     }
 
     /**
      * @param $time
      * @param $field
+     *
      * @return bool
      */
     private function matchRangeEvery($time, $field)
@@ -275,7 +284,8 @@ abstract class AbstractField
 
         $parts = explode('/', $field);
         $range = $parts[0];
-        $every = '*/' . $parts[1];
+        $every = '*/'.$parts[1];
+
         return $this->matchRange($time, $range) && $this->matchEvery($time, $every);
     }
 
@@ -290,6 +300,7 @@ abstract class AbstractField
     /**
      * @param $time
      * @param $field
+     *
      * @return bool
      */
     private function matchSpecific($time, $field)
@@ -299,14 +310,15 @@ abstract class AbstractField
 
     /**
      * @param $field
-     * @return string   one of field type
+     *
+     * @return string one of field type
      */
     private function getFieldType($field)
     {
         $cronPattern = $this->createCronPattern();
 
         if (!preg_match($cronPattern, $field, $matches)) {
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException();
         }
 
         $availableFieldType = [
@@ -315,7 +327,7 @@ abstract class AbstractField
             self::RANGE_FIELD,
             self::COMMA_FIELD,
             self::COMMA_EVERY_FIELD,
-            self::RANGE_EVERY_FIELD
+            self::RANGE_EVERY_FIELD,
         ];
 
         foreach ($availableFieldType as $fieldTypeName) {
@@ -324,7 +336,7 @@ abstract class AbstractField
             }
         }
 
-        throw new \InvalidArgumentException;
+        throw new \InvalidArgumentException();
     }
 
     /**
@@ -332,17 +344,17 @@ abstract class AbstractField
      */
     private function createCronPattern()
     {
-        $fullTimePattern = '(?:' . implode('|', $this->getTimePatterns()) . ')';
+        $fullTimePattern = '(?:'.implode('|', $this->getTimePatterns()).')';
 
         return '
             /
-                (?<' . self::ALWAYS_FIELD. '>^\*$)|
-                (?<' . self::EVERY_FIELD. '>^\*\/' . $fullTimePattern . '+$)|
-                (?<' . self::SPECIFIC_FIELD. '>^' . $fullTimePattern . '+$)|
-                (?<' . self::RANGE_FIELD. '>^' . $fullTimePattern . '-' . $fullTimePattern . '$)|
-                (?<' . self::COMMA_FIELD. '>^' . $fullTimePattern . '(?:,\d+)+$)|
-                (?<' . self::COMMA_EVERY_FIELD. '>^' . $fullTimePattern . '(?:,' . $fullTimePattern . ')+\/\d+$)|
-                (?<' . self::RANGE_EVERY_FIELD. '>^' . $fullTimePattern . '-' . $fullTimePattern . '\/\d+$)
+                (?<'.self::ALWAYS_FIELD.'>^\*$)|
+                (?<'.self::EVERY_FIELD.'>^\*\/'.$fullTimePattern.'+$)|
+                (?<'.self::SPECIFIC_FIELD.'>^'.$fullTimePattern.'+$)|
+                (?<'.self::RANGE_FIELD.'>^'.$fullTimePattern.'-'.$fullTimePattern.'$)|
+                (?<'.self::COMMA_FIELD.'>^'.$fullTimePattern.'(?:,\d+)+$)|
+                (?<'.self::COMMA_EVERY_FIELD.'>^'.$fullTimePattern.'(?:,'.$fullTimePattern.')+\/\d+$)|
+                (?<'.self::RANGE_EVERY_FIELD.'>^'.$fullTimePattern.'-'.$fullTimePattern.'\/\d+$)
             /xi
             ';
     }

@@ -46,7 +46,7 @@ class CronTime
     }
 
     /**
-     * Задание времени запуска через строку в крон формате
+     * Задание времени запуска через строку в крон формате.
      *
      * @param string $cron
      *
@@ -69,6 +69,7 @@ class CronTime
 
     /**
      * @param string $minute
+     *
      * @return $this
      */
     public function minute($minute)
@@ -80,6 +81,7 @@ class CronTime
 
     /**
      * @param string $hour
+     *
      * @return $this
      */
     public function hour($hour)
@@ -91,6 +93,7 @@ class CronTime
 
     /**
      * @param string $dayOfMonth
+     *
      * @return $this
      */
     public function dayOfMonth($dayOfMonth)
@@ -102,6 +105,7 @@ class CronTime
 
     /**
      * @param string $month
+     *
      * @return $this
      */
     public function month($month)
@@ -113,6 +117,7 @@ class CronTime
 
     /**
      * @param string $dayOfWeek
+     *
      * @return $this
      */
     public function dayOfWeek($dayOfWeek)
@@ -123,9 +128,10 @@ class CronTime
     }
 
     /**
-     * Проверяет совпалает ли паттерн крон с времение
+     * Проверяет совпалает ли паттерн крон с времение.
      *
      * @param \DateTime|null $now
+     *
      * @return bool
      */
     public function isMatch(\DateTime $now = null)
@@ -166,7 +172,7 @@ class CronTime
             $this->hour,
             $this->dayOfMonth,
             $this->month,
-            $this->dayOfWeek
+            $this->dayOfWeek,
         ];
     }
 }

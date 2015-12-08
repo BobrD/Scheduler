@@ -3,10 +3,8 @@
 namespace Simples\Scheduler\Tests\Functional;
 
 use Simples\Scheduler\Scheduler;
-use Simples\Scheduler\TaskInterface;
-use Simples\Scheduler\TaskSubscriberInterface;
 use Simples\Scheduler\Tests\Functional\Fixtures\BadTask;
-use Simples\Scheduler\Tests\Functional\Fixtures\SimpleSubscriber;
+use Simples\Scheduler\Tests\Functional\Fixtures\SimpleProvider;
 use Simples\Scheduler\Tests\Functional\Fixtures\Task;
 
 class SchedulerTest extends \PHPUnit_Framework_TestCase
@@ -15,7 +13,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dir = __DIR__ . '/tmp';
+        $dir = __DIR__.'/tmp';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -27,12 +25,12 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     {
         $scheduler = new Scheduler();
 
-        $subscriber = new SimpleSubscriber();
+        $subscriber = new SimpleProvider();
 
-        $subscriber->addTask(new Task($firstFile = $this->tmpDir . '/1'));
-        $subscriber->addTask(new Task($secondFile = $this->tmpDir . '/2'));
+        $subscriber->addTask(new Task($firstFile = $this->tmpDir.'/1'));
+        $subscriber->addTask(new Task($secondFile = $this->tmpDir.'/2'));
 
-        $scheduler->addSubscriber($subscriber);
+        $scheduler->addProvider($subscriber);
 
         $scheduler->run();
 
@@ -48,12 +46,12 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     {
         $scheduler = new Scheduler();
 
-        $subscriber = new SimpleSubscriber();
+        $subscriber = new SimpleProvider();
 
         $subscriber->addTask(new BadTask());
-        $subscriber->addTask(new Task($firstFile = $this->tmpDir . '/1'));
+        $subscriber->addTask(new Task($firstFile = $this->tmpDir.'/1'));
 
-        $scheduler->addSubscriber($subscriber);
+        $scheduler->addProvider($subscriber);
 
         $scheduler->run();
 
@@ -76,4 +74,3 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         rmdir($this->tmpDir);
     }
 }
-

@@ -4,29 +4,37 @@ namespace Simples\Scheduler\Tests\Unit;
 
 use Simples\Scheduler\Scheduler;
 use Simples\Scheduler\TaskInterface;
-use Simples\Scheduler\TaskSubscriberInterface;
+use Simples\Scheduler\TaskProviderInterface;
 
 class SchedulerTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddSubscriber()
     {
-        $taskSubscriber = $this->getMock(TaskSubscriberInterface::class);
-        $task = $this->getMock(TaskInterface::class);
+        $taskProviderA = $this->getMock(TaskProviderInterface::class);
+        $taskA = $this->getMock(TaskInterface::class);
+
+
+        $taskSubscriberB = $this->getMock(TaskProviderInterface::class);
+        $taskB = $this->getMock(TaskInterface::class);
+
+        $taskProviderA
+            ->expects($this->once())
+            ->method('getTasks')
+            ->willReturn([$taskA]);
+
+        $taskSubscriberB
+            ->expects($this->once())
+            ->method('getTasks')
+            ->willReturn([$taskB]);
 
         $scheduler = new Scheduler();
 
-        $scheduler->addSubscriber($taskSubscriber);
+        $scheduler->addProvider($taskProviderA);
+        $scheduler->addProvider($taskSubscriberB);
 
-        $taskSubscriber
-            ->expects($this->once())
-            ->method('getTasks')
-            ->willReturn([$task]);
 
         $tasks = $scheduler->getTasks();
 
-        $this->assertCount(1, $tasks);
-
-        $this->assertEquals($task, $tasks[0]);
+        $this->assertCount(2, $tasks);
     }
 }
-

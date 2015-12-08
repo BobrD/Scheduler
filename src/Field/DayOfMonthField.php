@@ -22,6 +22,7 @@ class DayOfMonthField extends AbstractField
 
     /**
      * @param \DateTime $dateTime
+     *
      * @return int
      */
     public function getTime(\DateTime $dateTime)

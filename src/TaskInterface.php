@@ -10,6 +10,8 @@ interface TaskInterface
     public function getCronTime();
 
     /**
+     * Start execute task.
+     *
      * @return void
      */
     public function start();

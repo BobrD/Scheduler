@@ -3,9 +3,9 @@
 namespace Simples\Scheduler\Tests\Functional\Fixtures;
 
 use Simples\Scheduler\TaskInterface;
-use Simples\Scheduler\TaskSubscriberInterface;
+use Simples\Scheduler\TaskProviderInterface;
 
-class SimpleSubscriber implements TaskSubscriberInterface
+class SimpleProvider implements TaskProviderInterface
 {
     private $tasks = [];
 

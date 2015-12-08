@@ -2,26 +2,23 @@
 
 namespace Simples\Scheduler;
 
-use Simples\Scheduler\TaskInterface;
-use Simples\Scheduler\TaskSubscriber;
-
 class Scheduler
 {
     /**
-     * @var TaskSubscriberInterface[]
+     * @var TaskProviderInterface[]
      */
     private $taskSubscribers;
 
     /**
-     * @param TaskSubscriberInterface $taskSubscriber
+     * @param TaskProviderInterface $taskProvider
      */
-    public function addSubscriber(TaskSubscriberInterface $taskSubscriber)
+    public function addProvider(TaskProviderInterface $taskProvider)
     {
-        $this->taskSubscribers[] = $taskSubscriber;
+        $this->taskSubscribers[] = $taskProvider;
     }
 
     /**
-     * Запуск крона
+     * Запуск крона.
      */
     public function run()
     {
@@ -63,12 +60,14 @@ class Scheduler
 
     /**
      * @param TaskInterface $task
+     *
      * @return int
      */
     private function runInSubProcess(TaskInterface $task)
     {
         if (!function_exists('pcntl_fork')) {
             $task->start();
+
             return;
         }
 
@@ -77,11 +76,12 @@ class Scheduler
         if ($pid === -1) {
             // Зупускаем задачу в текущем потоке если не смогли создать форк
             $task->start();
-        } else if (0 === $pid) {
+        } elseif (0 === $pid) {
             try {
                 $task->start();
             } catch (\Exception $e) {}
-            exit();
+
+            exit;
         }
     }
 }

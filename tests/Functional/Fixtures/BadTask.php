@@ -6,10 +6,7 @@ use Simples\Scheduler\CronTime;
 use Simples\Scheduler\TaskInterface;
 
 class BadTask implements TaskInterface
-{    public function __construct()
-    {
-    }
-
+{
     public function getCronTime()
     {
         return new CronTime('* * * * *');
